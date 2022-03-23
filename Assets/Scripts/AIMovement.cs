@@ -1,26 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AIMovement : MonoBehaviour
 {
-    private int _waypointIndex;
-    [SerializeField] private List<GameObject> _waypoints;
+    public int waypointIndex;
+    public List<GameObject> waypoints;
     [SerializeField] private float _moveToDistance = 1f;
     [SerializeField] private float _speed = 3f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject player;
+    [SerializeField] private float _chaseDistance = 3f;
+    [SerializeField] private float _stopDistance = 0.5f;
+    [SerializeField] private Text _confusionText;
 
-    // Update is called once per frame
-    void Update()
-    {
-        AIMoveTowards(_waypoints[_waypointIndex].transform);
-    }
-
-    private void AIMoveTowards(Transform goal)
+    public void AIMoveTowards(Transform goal)
     {
         Vector2 AIPosition = transform.position;
         if (Vector3.Distance(AIPosition, goal.position) > _moveToDistance)
@@ -37,13 +31,28 @@ public class AIMovement : MonoBehaviour
 
     private void WaypointUpdate()
     {
-        if(_waypointIndex < _waypoints.Count - 1)
+        if (waypointIndex < waypoints.Count - 1)
         {
-            _waypointIndex++;
+            waypointIndex++;
         }
         else
         {
-            _waypointIndex = 0;
+            waypointIndex = 0;
         }
+    }
+
+    public bool PlayerInRange()
+    {
+        return Vector3.Distance(transform.position, player.transform.position) <= _chaseDistance;
+    }
+
+    public void DisplayConfusionText()
+    {
+        _confusionText.gameObject.SetActive(true);
+    }
+
+    public void HideConfusionText()
+    {
+        _confusionText.gameObject.SetActive(false);
     }
 }
