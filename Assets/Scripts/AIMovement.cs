@@ -13,6 +13,7 @@ public class AIMovement : MonoBehaviour
     [SerializeField] private float _chaseDistance = 3f;
     [SerializeField] private float _stopDistance = 0.5f;
     [SerializeField] private Text _confusionText;
+    
 
     public void AIMoveTowards(Transform goal)
     {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StateMachine : MonoBehaviour
 {
@@ -8,9 +9,10 @@ public class StateMachine : MonoBehaviour
     {
         Attack,
         Defend,
-        Confusion
+        Confused
     }
 
+    [SerializeField] private Text _stateText;
     public State currentState;
     private AIMovement aIMovement;
 
@@ -30,8 +32,8 @@ public class StateMachine : MonoBehaviour
             case State.Defend:
                 StartCoroutine(DefendState());
                 break;
-            case State.Confusion:
-                StartCoroutine(ConfusionState());
+            case State.Confused:
+                StartCoroutine(ConfusedState());
                 break;
         }
     }
@@ -40,10 +42,11 @@ public class StateMachine : MonoBehaviour
     {
         while (currentState == State.Attack)
         {
+            UpdateStateText(currentState.ToString());
             aIMovement.AIMoveTowards(aIMovement.player.transform);
             if (!aIMovement.PlayerInRange())
             {
-                currentState = State.Confusion;
+                currentState = State.Confused;
             }
             yield return null;
         }
@@ -54,6 +57,7 @@ public class StateMachine : MonoBehaviour
     {
         while (currentState == State.Defend)
         {
+            UpdateStateText(currentState.ToString());
             aIMovement.AIMoveTowards(aIMovement.waypoints[aIMovement.waypointIndex].transform);
             if (aIMovement.PlayerInRange())
             {
@@ -64,10 +68,11 @@ public class StateMachine : MonoBehaviour
         NextState();
     }
 
-    private IEnumerator ConfusionState()
+    private IEnumerator ConfusedState()
     {
-        while(currentState == State.Confusion)
+        while(currentState == State.Confused)
         {
+            UpdateStateText(currentState.ToString());
             aIMovement.DisplayConfusionText();
             aIMovement.AIMoveTowards(transform);
             if (aIMovement.PlayerInRange())
@@ -82,5 +87,10 @@ public class StateMachine : MonoBehaviour
         }
         aIMovement.HideConfusionText();
         NextState();
+    }
+
+    private void UpdateStateText(string state)
+    {
+        _stateText.text = state;
     }
 }
