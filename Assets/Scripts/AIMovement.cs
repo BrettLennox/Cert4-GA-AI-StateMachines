@@ -20,8 +20,6 @@ public class AIMovement : MonoBehaviour
     public GameObject player;
     [Tooltip("The distance the player needs to be within for the AI to start chase")]
     [SerializeField] private float _chaseDistance = 3f;
-    [Tooltip("The distance the AI needs to be from the player to halt chase to stop jittering")]
-    [SerializeField] private float _stopDistance = 0.5f;
     #endregion
     
 
